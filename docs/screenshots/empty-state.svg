@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560">
+  <rect width="1200" height="560" fill="#f6f7fb"/>
+  <text x="80" y="62" fill="#1f2937" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Retailer Rewards</text>
+  <text x="80" y="98" fill="#6b7280" font-family="Segoe UI, Arial, sans-serif" font-size="16">Customer reward points from purchase transactions.</text>
+  <rect x="80" y="140" width="1040" height="92" rx="8" fill="#ffffff" stroke="#e5e7eb"/>
+  <text x="104" y="176" fill="#1f2937" font-family="Segoe UI, Arial, sans-serif" font-size="16" font-weight="700">No transactions</text>
+  <text x="104" y="204" fill="#6b7280" font-family="Segoe UI, Arial, sans-serif" font-size="15">There are no records to display yet.</text>
+  <text x="80" y="285" fill="#1f2937" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Customer monthly rewards</text>
+  <rect x="80" y="308" width="1040" height="58" rx="8" fill="#ffffff" stroke="#e5e7eb" stroke-dasharray="4 4"/>
+  <text x="104" y="344" fill="#6b7280" font-family="Segoe UI, Arial, sans-serif" font-size="15">No monthly summaries.</text>
+</svg>

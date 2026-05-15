@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Retailer Rewards Screenshot Harness</title>
+    <style>
+      :root {
+        --app-bg: #f6f7fb;
+        --surface: #ffffff;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --border: #e5e7eb;
+        --accent: #2563eb;
+        --danger-bg: #fef2f2;
+        --danger-text: #991b1b;
+        --radius: 8px;
+        color: var(--text);
+        font-family:
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        line-height: 1.5;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--app-bg);
+      }
+
+      .dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 1.5rem 1rem 3rem;
+      }
+
+      .dashboard--centered {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 60vh;
+      }
+
+      .dashboard-header {
+        margin-bottom: 2rem;
+      }
+
+      .dashboard-title {
+        margin: 0 0 0.5rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+      }
+
+      .dashboard-subtitle {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .dashboard-section {
+        margin-bottom: 2.5rem;
+      }
+
+      .section-title {
+        margin: 0 0 0.75rem;
+        font-size: 1.125rem;
+        font-weight: 600;
+      }
+
+      .data-table-wrap {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        background: var(--surface);
+      }
+
+      .table-caption {
+        margin: 0;
+        padding: 0.75rem 1rem;
+        font-weight: 600;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+        font-size: 0.9375rem;
+      }
+
+      th,
+      td {
+        padding: 0.625rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+
+      th {
+        background: #f9fafb;
+        font-weight: 600;
+      }
+
+      .numeric {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .sort {
+        color: #c7ccd5;
+        margin-left: 0.25rem;
+      }
+
+      .table-pagination {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.625rem 1rem;
+        color: var(--muted);
+        font-size: 0.875rem;
+      }
+
+      .skeleton {
+        display: block;
+        height: 0.7rem;
+        max-width: 100%;
+        border-radius: 4px;
+        background: linear-gradient(
+          90deg,
+          #e8eaee 0%,
+          #f4f5f7 45%,
+          #f4f5f7 55%,
+          #e8eaee 100%
+        );
+      }
+
+      .empty-root {
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+      }
+
+      .empty-title {
+        margin: 0 0 0.25rem;
+        font-weight: 600;
+      }
+
+      .empty-desc {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .error-root {
+        max-width: 28rem;
+        padding: 1.25rem;
+        background: var(--danger-bg);
+        border: 1px solid #fecaca;
+        border-radius: var(--radius);
+      }
+
+      .error-text {
+        margin: 0 0 1rem;
+        color: var(--danger-text);
+      }
+
+      .btn-retry {
+        padding: 0.5rem 1rem;
+        color: #ffffff;
+        background: var(--accent);
+        border: 0;
+        border-radius: 6px;
+        font: inherit;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="normal" class="dashboard" hidden>
+      <header class="dashboard-header">
+        <h1 class="dashboard-title">Retailer Rewards</h1>
+        <p class="dashboard-subtitle">
+          Customer reward points from purchase transactions.
+        </p>
+      </header>
+      <section class="dashboard-section">
+        <h2 class="section-title">Customer monthly rewards</h2>
+        <div class="data-table-wrap">
+          <p class="table-caption">Monthly reward points by customer</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Customer ID</th>
+                <th>Customer Name <span class="sort">up/down</span></th>
+                <th>Month</th>
+                <th>Year</th>
+                <th class="numeric">Reward Points <span class="sort">up/down</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>cust-1</td>
+                <td>Rohit Sharma</td>
+                <td>February</td>
+                <td>2026</td>
+                <td class="numeric">2539</td>
+              </tr>
+              <tr>
+                <td>cust-2</td>
+                <td>Virat Kohli</td>
+                <td>February</td>
+                <td>2026</td>
+                <td class="numeric">1566</td>
+              </tr>
+              <tr>
+                <td>cust-3</td>
+                <td>Logesh S</td>
+                <td>February</td>
+                <td>2026</td>
+                <td class="numeric">1565</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-pagination">
+            <span>Showing 1-10 of 28</span>
+            <span>Page 1 of 3</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <main id="loading" class="dashboard" hidden>
+      <header class="dashboard-header">
+        <h1 class="dashboard-title">Retailer Rewards</h1>
+        <p class="dashboard-subtitle">
+          Customer reward points from purchase transactions.
+        </p>
+      </header>
+      <section class="dashboard-section">
+        <h2 class="section-title">Customer monthly rewards</h2>
+        <div class="data-table-wrap">
+          <p class="table-caption">Monthly reward points by customer</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Customer ID</th>
+                <th>Customer Name</th>
+                <th>Month</th>
+                <th>Year</th>
+                <th class="numeric">Reward Points</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="skeleton" style="width: 35%"></span></td>
+                <td><span class="skeleton" style="width: 68%"></span></td>
+                <td><span class="skeleton" style="width: 42%"></span></td>
+                <td><span class="skeleton" style="width: 35%"></span></td>
+                <td><span class="skeleton" style="width: 52%; margin-left: auto"></span></td>
+              </tr>
+              <tr>
+                <td><span class="skeleton" style="width: 42%"></span></td>
+                <td><span class="skeleton" style="width: 94%"></span></td>
+                <td><span class="skeleton" style="width: 35%"></span></td>
+                <td><span class="skeleton" style="width: 42%"></span></td>
+                <td><span class="skeleton" style="width: 52%; margin-left: auto"></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <main id="empty" class="dashboard" hidden>
+      <header class="dashboard-header">
+        <h1 class="dashboard-title">Retailer Rewards</h1>
+        <p class="dashboard-subtitle">
+          Customer reward points from purchase transactions.
+        </p>
+      </header>
+      <div class="empty-root">
+        <p class="empty-title">No transactions</p>
+        <p class="empty-desc">There are no records to display yet.</p>
+      </div>
+      <section class="dashboard-section">
+        <h2 class="section-title">Customer monthly rewards</h2>
+        <p class="empty-root">No monthly summaries.</p>
+      </section>
+    </main>
+
+    <main id="error" class="dashboard dashboard--centered" hidden>
+      <div class="error-root">
+        <p class="error-text">Unable to load transactions.</p>
+        <button class="btn-retry" type="button">Try again</button>
+      </div>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search)
+      const state = params.get('state') || 'normal'
+      document.getElementById(state).hidden = false
+    </script>
+  </body>
+</html>
