@@ -1,4 +1,4 @@
-# Retail_Rewards
+# Retail Rewards
 A React JS application that calculates and displays customer reward points based on retail purchase transactions over a three-month period.
 The application simulates asynchronous API calls, processes transaction-based reward calculations, and provides monthly as well as total reward summaries for each customer.
 
