@@ -48,38 +48,6 @@ docs/
   screenshots/       README state captures
 ```
 
-## Setup
-
-```powershell
-npm.cmd install
-```
-
-PowerShell may block `npm.ps1` on some Windows machines. Use `npm.cmd`
-commands if that happens.
-
-## Run
-
-```powershell
-npm.cmd run dev -- --host 127.0.0.1 --port 5173
-```
-
-Open:
-
-```text
-http://127.0.0.1:5173/
-```
-
-## Test And Quality Checks
-
-```powershell
-npm.cmd test -- --runInBand
-npm.cmd run lint
-npm.cmd run build
-```
-
-The production build may require running outside restricted sandboxes on
-Windows because Vite can need child-process access while loading config.
-
 ## Screenshots
 
 Normal flow:
@@ -104,8 +72,7 @@ production app.
 
 ## Assumptions And Edge Cases
 
-- Mock data includes multiple customers, decimal purchase amounts, and a
-  consecutive three-month transaction history.
+- Mock data includes multiple customers, decimal purchase amounts, and a consecutive three-month transaction history.
 - Monthly aggregation is keyed by customer, month, and year so the same
   month across different years remains separate.
 - Invalid transaction dates are ignored in monthly aggregation.
@@ -114,16 +81,3 @@ production app.
 - Currency display uses `Intl.NumberFormat` with USD.
 - Table header names intentionally do not use hover tooltips; sorting
   affordances are left to the table library.
-
-## Version Control
-
-This workspace is intended to be initialized as a local Git repository
-and committed with:
-
-```powershell
-git init
-git add .
-git commit -m "Refactor rewards dashboard quality and documentation"
-```
-
-Add a GitHub remote and push only when a repository URL is available.
