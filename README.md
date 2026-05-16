@@ -52,19 +52,19 @@ docs/
 
 Normal flow:
 
-![Normal rewards dashboard](docs/screenshots/normal-flow.svg)
+![Normal rewards dashboard](docs/screenshots/normal-flow.png)
 
 Loading state:
 
-![Loading rewards dashboard](docs/screenshots/loading-state.svg)
+![Loading rewards dashboard](docs/screenshots/loading-state.png)
 
 Empty state:
 
-![Empty rewards dashboard](docs/screenshots/empty-state.svg)
+![Empty rewards dashboard](docs/screenshots/empty-state.png)
 
 Error state:
 
-![Error rewards dashboard](docs/screenshots/error-state.svg)
+![Error rewards dashboard](docs/screenshots/error-state.png)
 
 The static documentation harness at `docs/screenshot-harness.html` is
 provided only for screenshot/reference work. It is not imported by the
