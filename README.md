@@ -40,8 +40,7 @@ src/
   services/          Mock async API service
   styles/            Global and dashboard CSS
   test/              Test-only wrappers
-  tests/             Jest test suites
-  theme/             Shared MUI theme
+  tests/             Jest test suite
   types/             Reusable PropTypes shapes
   utils/             Reward, formatting, logging, and row helpers
 docs/
