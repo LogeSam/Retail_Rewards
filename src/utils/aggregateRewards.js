@@ -1,4 +1,5 @@
 import { calculateRewardPoints } from "./rewardPoints.js";
+import { sortMonthlyRewards } from "./sortMonthlyRewards.js";
 
 const MONTH_NAMES = [
   "January",
@@ -36,33 +37,6 @@ const getPurchaseDateParts = (purchaseDate) => {
 const monthlyKey = (customerId, year, monthIndex) =>
   `${customerId}|${year}|${monthIndex}`;
 
-const getMonthIndexByName = (monthName) => MONTH_NAMES.indexOf(monthName);
-
-export const compareMonthlyRewards = (a, b) => {
-  // Compare numeric suffix of customerId when possible (cust-10 -> 10)
-  const extractIdNumber = (id) => {
-    const s = String(id);
-    const m = s.match(/(\d+)$/);
-    return m ? Number(m[1]) : NaN;
-  };
-
-  const aNum = extractIdNumber(a.customerId);
-  const bNum = extractIdNumber(b.customerId);
-  if (!Number.isNaN(aNum) && !Number.isNaN(bNum) && aNum !== bNum) {
-    return aNum - bNum;
-  }
-
-  // Fallback to string compare if numeric extraction fails or ties
-  const idCompare = String(a.customerId).localeCompare(String(b.customerId));
-  if (idCompare !== 0) return idCompare;
-
-  // Next sort by year
-  if (a.year !== b.year) return a.year - b.year;
-
-  // Finally sort by month index
-  return getMonthIndexByName(a.month) - getMonthIndexByName(b.month);
-};
-
 export const aggregateMonthlyRewards = (transactions) => {
   const byKey = transactions.reduce((acc, tx) => {
     const dateParts = getPurchaseDateParts(tx.purchaseDate);
@@ -89,7 +63,7 @@ export const aggregateMonthlyRewards = (transactions) => {
     return acc;
   }, {});
 
-  return Object.values(byKey).sort(compareMonthlyRewards);
+  return sortMonthlyRewards(Object.values(byKey));
 };
 
 export const aggregateTotalRewardsByCustomer = (transactions) => {
@@ -99,6 +73,7 @@ export const aggregateTotalRewardsByCustomer = (transactions) => {
     const add = tx.rewardPoints ?? 0;
     if (!prev) {
       acc[id] = {
+        customerId: id,
         customerName: tx.customerName,
         totalRewardPoints: add,
       };

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 import { childrenPropType } from "../types/componentTypes.js";
 import { logger } from "../utils/logger.js";
@@ -10,6 +11,10 @@ const ErrorFallback = ({ error }) => (
     </p>
   </div>
 );
+
+ErrorFallback.propTypes = {
+  error: PropTypes.instanceOf(Error).isRequired,
+};
 
 const handleError = (error, info) => {
   logger.error("Unhandled React error.", error, info);

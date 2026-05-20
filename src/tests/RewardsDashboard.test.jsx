@@ -9,8 +9,9 @@ import {
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { RewardsDashboard } from '../pages/RewardsDashboard.jsx'
+import { ClientError, ServerError } from '../services/apiErrors.js'
 import { fetchTransactions } from '../services/mockApi.js'
-import { MuiTestWrapper } from '../test/MuiTestWrapper.jsx'
+import { MuiTestWrapper } from '../test/MuiTestWrapper.js'
 
 jest.mock('../services/mockApi.js', () => ({
   fetchTransactions: jest.fn(),
@@ -103,7 +104,7 @@ describe('RewardsDashboard', () => {
     const user = userEvent.setup()
 
     fetchTransactions
-      .mockRejectedValueOnce(new Error('Unable to load transactions.'))
+      .mockRejectedValueOnce(new ServerError(503))
       .mockResolvedValueOnce([sampleRow])
 
     renderDashboard()
@@ -112,7 +113,7 @@ describe('RewardsDashboard', () => {
       expect(screen.getByRole('alert')).toBeInTheDocument()
     })
 
-    expect(screen.getByText(/Unable to load transactions/i)).toBeInTheDocument()
+    expect(screen.getByText(/temporarily unavailable/i)).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: /try again/i }))
 
@@ -121,6 +122,21 @@ describe('RewardsDashboard', () => {
         screen.getByRole('heading', { name: /Customer monthly rewards/i }),
       ).toBeInTheDocument()
     })
+  })
+
+  it('hides retry for client errors', async () => {
+    fetchTransactions.mockRejectedValueOnce(new ClientError(404))
+
+    renderDashboard()
+
+    await waitFor(() => {
+      expect(screen.getByRole('alert')).toBeInTheDocument()
+    })
+
+    expect(screen.getByText(/not found/i)).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: /try again/i }),
+    ).not.toBeInTheDocument()
   })
 
   it('shows empty state when there are no transactions', async () => {

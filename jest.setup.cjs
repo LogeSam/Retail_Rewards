@@ -2,6 +2,11 @@ process.env.TZ = 'UTC'
 
 require('@testing-library/jest-dom')
 
+if (!globalThis.fetch) {
+  globalThis.fetch = () =>
+    Promise.reject(new TypeError('fetch is not available in this test environment'))
+}
+
 global.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}

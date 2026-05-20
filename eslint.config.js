@@ -16,7 +16,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.jsx'],
+    files: ['**/*.{js,jsx}'],
     ...react.configs.flat['jsx-runtime'],
     settings: {
       react: { version: 'detect' },
@@ -27,7 +27,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.jsx'],
+    files: ['**/*.{js,jsx}'],
     ...jsxA11y.flatConfigs.recommended,
   },
   {
@@ -51,7 +51,13 @@ export default defineConfig([
   {
     files: ['jest.setup.cjs'],
     languageOptions: {
-      globals: globals.browser,
+      globals: { ...globals.browser, ...globals.jest },
+    },
+  },
+  {
+    files: ['src/tests/**/*.js'],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.jest },
     },
   },
   {

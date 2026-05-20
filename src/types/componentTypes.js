@@ -33,6 +33,7 @@ export const monthlyRewardShape = PropTypes.shape({
 })
 
 export const totalRewardShape = PropTypes.shape({
+  customerId: PropTypes.string.isRequired,
   customerName: PropTypes.string.isRequired,
   rowKey: PropTypes.string,
   totalRewardPoints: PropTypes.number.isRequired,

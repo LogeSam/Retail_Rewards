@@ -1,31 +1,21 @@
+import { readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { aggregateMonthlyRewards } from '../src/utils/aggregateRewards.js'
-import { MOCK_TRANSACTIONS } from '../src/constants/mockData.js'
 import { withMonthlyRowKeys } from '../src/utils/rewardRows.js'
 
-const monthly = aggregateMonthlyRewards(MOCK_TRANSACTIONS)
+const __dirname = dirname(fileURLToPath(import.meta.url))
+const transactionsPath = join(__dirname, '../public/mock/transactions.json')
+const transactions = JSON.parse(readFileSync(transactionsPath, 'utf8'))
 
-const extractNum = (id) => {
-  const m = String(id).match(/(\d+)$/)
-  return m ? Number(m[1]) : NaN
-}
+const monthly = aggregateMonthlyRewards(transactions)
+const rows = withMonthlyRowKeys(monthly)
 
-const sorted = [...monthly].sort((a, b) => {
-  const aNum = extractNum(a.customerId)
-  const bNum = extractNum(b.customerId)
-  if (!Number.isNaN(aNum) && !Number.isNaN(bNum) && aNum !== bNum) {
-    return aNum - bNum
-  }
-
-  const idCompare = String(a.customerId).localeCompare(String(b.customerId))
-  if (idCompare !== 0) return idCompare
-
-  if (a.year !== b.year) return a.year - b.year
-
-  const aMonth = new Date(`${a.month} 1, ${a.year}`).getMonth()
-  const bMonth = new Date(`${b.month} 1, ${b.year}`).getMonth()
-  return aMonth - bMonth
-})
-
-const rows = withMonthlyRowKeys(sorted)
-
-console.log(rows.map(r => `${r.customerId} | ${r.customerName} | ${r.month} | ${r.year} | ${r.rewardPoints}`).join('\n'))
+console.log(
+  rows
+    .map(
+      (row) =>
+        `${row.customerId} | ${row.customerName} | ${row.month} | ${row.year} | ${row.rewardPoints}`,
+    )
+    .join('\n'),
+)

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useReducer } from "react";
+import { getUserMessage, isRetryableError } from "../services/apiErrors.js";
 import { fetchTransactions } from "../services/mockApi.js";
 import {
   aggregateMonthlyRewards,
@@ -9,6 +10,7 @@ import { logger } from "../utils/logger.js";
 
 const initialRewardsState = {
   error: null,
+  retryable: true,
   rawTransactions: [],
   status: "loading",
 };
@@ -18,6 +20,7 @@ const rewardsDataReducer = (state, action) => {
     return {
       ...state,
       error: null,
+      retryable: true,
       status: "loading",
     };
   }
@@ -25,6 +28,7 @@ const rewardsDataReducer = (state, action) => {
   if (action.type === "success") {
     return {
       error: null,
+      retryable: true,
       rawTransactions: action.payload,
       status: "success",
     };
@@ -32,7 +36,8 @@ const rewardsDataReducer = (state, action) => {
 
   if (action.type === "error") {
     return {
-      error: action.payload,
+      error: action.payload.message,
+      retryable: action.payload.retryable,
       rawTransactions: [],
       status: "error",
     };
@@ -41,8 +46,10 @@ const rewardsDataReducer = (state, action) => {
   return state;
 };
 
-const resolveErrorMessage = (error) =>
-  error instanceof Error ? error.message : "Something went wrong.";
+const resolveErrorState = (error) => ({
+  message: getUserMessage(error),
+  retryable: isRetryableError(error),
+});
 
 const loadTransactions = (fetchOptions, override = {}) =>
   fetchTransactions({
@@ -51,6 +58,7 @@ const loadTransactions = (fetchOptions, override = {}) =>
   });
 
 export const useRewardsData = (fetchOptions) => {
+  // useReducer dispatch — not Redux useDispatch.
   const [state, dispatch] = useReducer(rewardsDataReducer, initialRewardsState);
 
   const executeLoad = async (override = {}, active = true) => {
@@ -64,7 +72,7 @@ export const useRewardsData = (fetchOptions) => {
     } catch (error) {
       logger.error("Unable to load reward transactions.", error);
       if (active) {
-        dispatch({ type: "error", payload: resolveErrorMessage(error) });
+        dispatch({ type: "error", payload: resolveErrorState(error) });
       }
     }
   };
@@ -111,6 +119,7 @@ export const useRewardsData = (fetchOptions) => {
     totals,
     loading: state.status === "loading",
     error: state.error,
+    retryable: state.retryable,
     retry,
   };
 };

@@ -31,10 +31,11 @@ Examples:
 ## Directory Structure
 
 ```text
+public/
+  mock/              Mock transaction JSON served at runtime
 src/
   components/        Shared UI components and table wrappers
   config/            Reward table column definitions
-  constants/         Mock transaction data
   hooks/             Data loading and dashboard state hooks
   pages/             Page-level dashboard composition
   services/          Mock async API service
