@@ -62,9 +62,41 @@ describe('fetchTransactions', () => {
     ).rejects.toBeInstanceOf(NetworkError)
   })
 
+  it('maps fetch TypeError rejections to network errors', async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    globalThis.fetch = jest.fn().mockRejectedValue(new TypeError('Failed to fetch'))
+
+    await expect(fetchTransactions({ delayMs: 0 })).rejects.toBeInstanceOf(
+      NetworkError,
+    )
+  })
+
+  it('does not treat TypeError-like objects as network errors', async () => {
+    const typeErrorLike = { name: 'TypeError', message: 'not really a TypeError' }
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    globalThis.fetch = jest.fn().mockRejectedValue(typeErrorLike)
+
+    await expect(fetchTransactions({ delayMs: 0 })).rejects.toBe(typeErrorLike)
+  })
+
   it('rejects with a timeout error when shouldFail is timeout', async () => {
     await expect(
       fetchTransactions({ shouldFail: 'timeout', delayMs: 0 }),
+    ).rejects.toBeInstanceOf(TimeoutError)
+  })
+
+  it('maps aborted fetch requests to timeout errors', async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
+    globalThis.fetch = jest.fn((_url, { signal }) =>
+      new Promise((_resolve, reject) => {
+        signal.addEventListener('abort', () => {
+          reject(new DOMException('Aborted', 'AbortError'))
+        })
+      }),
+    )
+
+    await expect(
+      fetchTransactions({ delayMs: 0, timeoutMs: 1 }),
     ).rejects.toBeInstanceOf(TimeoutError)
   })
 

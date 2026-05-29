@@ -18,9 +18,9 @@ export const transactionShape = PropTypes.shape({
   productPurchased: PropTypes.string,
   purchaseAmount: PropTypes.number.isRequired,
   purchaseDate: PropTypes.string.isRequired,
-  rewardPoints: PropTypes.number,
-  rowKey: PropTypes.string,
-  transactionId: PropTypes.string.isRequired,
+  rewardPoints: PropTypes.number.isRequired,
+  rowKey: PropTypes.string.isRequired,
+  transactionId: PropTypes.string,
 })
 
 export const monthlyRewardShape = PropTypes.shape({
@@ -28,13 +28,13 @@ export const monthlyRewardShape = PropTypes.shape({
   customerName: PropTypes.string.isRequired,
   month: PropTypes.string.isRequired,
   rewardPoints: PropTypes.number.isRequired,
-  rowKey: PropTypes.string,
+  rowKey: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
 })
 
 export const totalRewardShape = PropTypes.shape({
   customerId: PropTypes.string.isRequired,
   customerName: PropTypes.string.isRequired,
-  rowKey: PropTypes.string,
+  rowKey: PropTypes.string.isRequired,
   totalRewardPoints: PropTypes.number.isRequired,
 })

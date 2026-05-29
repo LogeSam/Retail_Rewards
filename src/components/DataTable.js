@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { DataTableMrt, DATA_TABLE_PAGINATION_THRESHOLD } from './DataTableMrt.jsx'
+import { DataTableMrt, DATA_TABLE_PAGINATION_THRESHOLD } from './DataTableMrt.js'
 import { tableColumnShape } from '../types/componentTypes.js'
 
 export { DATA_TABLE_PAGINATION_THRESHOLD }

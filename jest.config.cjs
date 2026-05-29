@@ -6,15 +6,15 @@ module.exports = {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   },
   transform: {
-    '^.+\\.(js|jsx)$': 'babel-jest',
+    '^.+\\.js$': 'babel-jest',
   },
   transformIgnorePatterns: [
     '/node_modules/(?!(@mui|@emotion|material-react-table|@tanstack)/)',
   ],
   testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.{js,jsx}',
-    '<rootDir>/src/**/*.{spec,test}.{js,jsx}',
-    '<rootDir>/src/tests/**/*.{js,jsx}',
+    '<rootDir>/src/**/__tests__/**/*.js',
+    '<rootDir>/src/**/*.{spec,test}.js',
+    '<rootDir>/src/tests/**/*.js',
   ],
-  collectCoverageFrom: ['src/**/*.{js,jsx}', '!src/main.jsx'],
+  collectCoverageFrom: ['src/**/*.js', '!src/index.js'],
 }

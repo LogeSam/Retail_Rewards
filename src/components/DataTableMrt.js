@@ -95,13 +95,40 @@ export const DataTableMrt = ({
 }) => {
   const total = rows.length
   const showPagination = total > DATA_TABLE_PAGINATION_THRESHOLD
+  const resolvedPageSize = showPagination ? pageSizeProp : Math.max(total, 1)
 
-  const [pagination, setPagination] = useState({
+  const [paginationState, setPaginationState] = useState({
     pageIndex: 0,
-    pageSize: showPagination ? pageSizeProp : Math.max(total, 1),
+    rows,
+    pageSize: resolvedPageSize,
+    showPagination,
   })
 
   const mrtColumns = useMemo(() => buildMrtColumns(columns), [columns])
+
+  const pageCount = showPagination
+    ? Math.max(1, Math.ceil(total / resolvedPageSize))
+    : 1
+  const isPaginationCurrent =
+    paginationState.rows === rows &&
+    paginationState.pageSize === resolvedPageSize &&
+    paginationState.showPagination === showPagination
+  const pagination = useMemo(
+    () => ({
+      pageIndex:
+        isPaginationCurrent && showPagination
+          ? Math.min(paginationState.pageIndex, pageCount - 1)
+          : 0,
+      pageSize: resolvedPageSize,
+    }),
+    [
+      isPaginationCurrent,
+      pageCount,
+      paginationState.pageIndex,
+      resolvedPageSize,
+      showPagination,
+    ],
+  )
 
   const table = useMaterialReactTable({
     columns: mrtColumns,
@@ -123,9 +150,15 @@ export const DataTableMrt = ({
     autoResetPageIndex: true,
     state: { pagination },
     onPaginationChange: (updater) => {
-      setPagination((prev) =>
-        typeof updater === 'function' ? updater(prev) : updater,
-      )
+      const next =
+        typeof updater === 'function' ? updater(pagination) : updater
+
+      setPaginationState({
+        pageIndex: next.pageIndex ?? 0,
+        rows,
+        pageSize: resolvedPageSize,
+        showPagination,
+      })
     },
     defaultColumn: {
       muiTableBodyCellProps: {
@@ -192,7 +225,7 @@ export const DataTableMrt = ({
   })
 
   const { pageIndex, pageSize } = table.getState().pagination
-  const pageCount = Math.max(1, table.getPageCount())
+  const tablePageCount = Math.max(1, table.getPageCount())
   const rangeStart = showPagination ? pageIndex * pageSize + 1 : 1
   const rangeEnd = showPagination
     ? Math.min((pageIndex + 1) * pageSize, total)
@@ -261,7 +294,7 @@ export const DataTableMrt = ({
               <button
                 type="button"
                 className="table-pagination__btn table-pagination__btn--icon"
-                onClick={() => table.setPageIndex(pageCount - 1)}
+                onClick={() => table.setPageIndex(tablePageCount - 1)}
                 disabled={!table.getCanNextPage()}
                 aria-label="Last page"
                 title="Go to last page"

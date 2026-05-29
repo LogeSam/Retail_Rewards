@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "start": "node ./scripts/reactScripts.cjs start",
+    "dev": "node ./scripts/reactScripts.cjs start",
+    "build": "node ./scripts/reactScripts.cjs build",
     "lint": "eslint .",
-    "preview": "vite preview",
     "test": "jest",
     "test:watch": "jest --watch"
   },
@@ -21,8 +21,7 @@
     "prop-types": "^15.8.1",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-error-boundary": "^6.1.1",
-    "react-router-dom": "^7.15.1"
+    "react-error-boundary": "^6.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
@@ -36,17 +35,27 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
     "babel-jest": "^30.4.1",
     "eslint": "^9.39.4",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
-    "vite": "^8.0.12"
+    "react-scripts": "^5.0.1"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

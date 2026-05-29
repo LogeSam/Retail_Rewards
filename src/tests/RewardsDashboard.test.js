@@ -8,7 +8,7 @@ import {
 } from '@jest/globals'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { RewardsDashboard } from '../pages/RewardsDashboard.jsx'
+import { RewardsDashboard } from '../pages/RewardsDashboard.js'
 import { ClientError, ServerError } from '../services/apiErrors.js'
 import { fetchTransactions } from '../services/mockApi.js'
 import { MuiTestWrapper } from '../test/MuiTestWrapper.js'
@@ -147,5 +147,10 @@ describe('RewardsDashboard', () => {
     await waitFor(() => {
       expect(screen.getByText('No transactions')).toBeInTheDocument()
     })
+
+    expect(screen.getAllByText('No transactions')).toHaveLength(1)
+    expect(screen.queryByText('No monthly summaries.')).not.toBeInTheDocument()
+    expect(screen.queryByText('No customer totals.')).not.toBeInTheDocument()
+    expect(screen.queryByText('No transactions.')).not.toBeInTheDocument()
   })
 })

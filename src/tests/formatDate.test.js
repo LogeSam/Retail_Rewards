@@ -1,6 +1,10 @@
-import { describe, expect, it } from '@jest/globals'
+import { afterEach, describe, expect, it, jest } from '@jest/globals'
 import { formatCurrency } from '../utils/formatCurrency.js'
 import { formatPurchaseDate } from '../utils/formatDate.js'
+
+afterEach(() => {
+  jest.restoreAllMocks()
+})
 
 describe('formatPurchaseDate', () => {
   it('returns empty string for invalid input', () => {
@@ -21,5 +25,14 @@ describe('formatPurchaseDate', () => {
 describe('formatCurrency', () => {
   it('formats USD amounts with decimal precision', () => {
     expect(formatCurrency(19.99, 'en-US')).toBe('$19.99')
+  })
+
+  it('returns a fallback for invalid amounts', () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => {})
+
+    expect(formatCurrency(undefined, 'en-US')).toBe('—')
+    expect(formatCurrency(null, 'en-US')).toBe('—')
+    expect(formatCurrency(Number.NaN, 'en-US')).toBe('—')
+    expect(console.warn).toHaveBeenCalledTimes(3)
   })
 })

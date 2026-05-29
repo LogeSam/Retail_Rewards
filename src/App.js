@@ -1,5 +1,5 @@
-import { ErrorBoundary } from "./components/ErrorBoundary.jsx";
-import { RewardsDashboard } from "./pages/RewardsDashboard.jsx";
+import { ErrorBoundary } from "./components/ErrorBoundary.js";
+import { RewardsDashboard } from "./pages/RewardsDashboard.js";
 import "./styles/global.css";
 
 const App = () => (

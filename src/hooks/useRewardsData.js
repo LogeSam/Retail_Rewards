@@ -61,38 +61,41 @@ export const useRewardsData = (fetchOptions) => {
   // useReducer dispatch — not Redux useDispatch.
   const [state, dispatch] = useReducer(rewardsDataReducer, initialRewardsState);
 
-  const executeLoad = async (override = {}, active = true) => {
-    dispatch({ type: "loading" });
+  const executeLoad = useCallback(
+    async (override = {}, isActive = () => true) => {
+      dispatch({ type: "loading" });
 
-    try {
-      const data = await loadTransactions(fetchOptions, override);
-      if (active) {
-        dispatch({ type: "success", payload: data });
+      try {
+        const data = await loadTransactions(fetchOptions, override);
+        if (isActive()) {
+          dispatch({ type: "success", payload: data });
+        }
+      } catch (error) {
+        logger.error("Unable to load reward transactions.", error);
+        if (isActive()) {
+          dispatch({ type: "error", payload: resolveErrorState(error) });
+        }
       }
-    } catch (error) {
-      logger.error("Unable to load reward transactions.", error);
-      if (active) {
-        dispatch({ type: "error", payload: resolveErrorState(error) });
-      }
-    }
-  };
+    },
+    [fetchOptions],
+  );
 
   const load = useCallback(
     (override = {}) => {
-      void executeLoad(override, true);
+      void executeLoad(override);
     },
-    [fetchOptions],
+    [executeLoad],
   );
 
   useEffect(() => {
     let active = true;
 
-    void executeLoad(undefined, active);
+    void executeLoad(undefined, () => active);
 
     return () => {
       active = false;
     };
-  }, [fetchOptions]);
+  }, [executeLoad]);
 
   const transactions = useMemo(
     () => enrichTransactionsWithRewards(state.rawTransactions),

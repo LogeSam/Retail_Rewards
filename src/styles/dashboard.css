@@ -326,28 +326,6 @@
   border-radius: var(--radius);
 }
 
-.loading-root {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: var(--muted);
-}
-
-.loading-spinner {
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .error-root {
   max-width: 28rem;
   padding: 1.25rem;
@@ -411,7 +389,7 @@
 }
 
 .error-boundary-text {
-  margin: 0;
+  margin: 0 0 1rem;
   color: var(--muted);
 }
 

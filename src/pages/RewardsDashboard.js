@@ -1,9 +1,8 @@
 import PropTypes from "prop-types";
-import { useMemo } from "react";
-import { DataTable } from "../components/DataTable.jsx";
-import { EmptyState } from "../components/EmptyState.jsx";
-import { ErrorMessage } from "../components/ErrorMessage.jsx";
-import { TableSkeleton } from "../components/TableSkeleton.jsx";
+import { DataTable } from "../components/DataTable.js";
+import { EmptyState } from "../components/EmptyState.js";
+import { ErrorMessage } from "../components/ErrorMessage.js";
+import { TableSkeleton } from "../components/TableSkeleton.js";
 import {
   MONTHLY_COLUMNS,
   TOTAL_COLUMNS,
@@ -16,11 +15,6 @@ import {
   transactionShape,
   childrenPropType,
 } from "../types/componentTypes.js";
-import {
-  withMonthlyRowKeys,
-  withTotalRowKeys,
-  withTransactionRowKeys,
-} from "../utils/rewardRows.js";
 import "../styles/dashboard.css";
 
 const SKELETON_ROW_COUNT = 10;
@@ -31,21 +25,18 @@ const TABLE_SECTIONS = [
     heading: "Customer monthly rewards",
     caption: "Monthly reward points by customer",
     columns: MONTHLY_COLUMNS,
-    emptyLabel: "No monthly summaries.",
   },
   {
     id: "totals",
     heading: "Total rewards",
     caption: "Total reward points by customer",
     columns: TOTAL_COLUMNS,
-    emptyLabel: "No customer totals.",
   },
   {
     id: "transactions",
     heading: "Transactions",
     caption: "Transaction history with calculated reward points",
     columns: TRANSACTION_COLUMNS,
-    emptyLabel: "No transactions.",
   },
 ];
 
@@ -114,34 +105,36 @@ const RewardsDashboardView = ({
         title="No transactions"
         description="There are no records to display yet."
       />
-    ) : null}
+    ) : (
+      <>
+        <DashboardSection id="monthly" title="Customer monthly rewards">
+          <DataTable
+            caption="Monthly reward points by customer"
+            columns={MONTHLY_COLUMNS}
+            rows={monthlyRows}
+            emptyLabel="No monthly summaries."
+          />
+        </DashboardSection>
 
-    <DashboardSection id="monthly" title="Customer monthly rewards">
-      <DataTable
-        caption="Monthly reward points by customer"
-        columns={MONTHLY_COLUMNS}
-        rows={monthlyRows}
-        emptyLabel="No monthly summaries."
-      />
-    </DashboardSection>
+        <DashboardSection id="totals" title="Total rewards">
+          <DataTable
+            caption="Total reward points by customer"
+            columns={TOTAL_COLUMNS}
+            rows={totalRows}
+            emptyLabel="No customer totals."
+          />
+        </DashboardSection>
 
-    <DashboardSection id="totals" title="Total rewards">
-      <DataTable
-        caption="Total reward points by customer"
-        columns={TOTAL_COLUMNS}
-        rows={totalRows}
-        emptyLabel="No customer totals."
-      />
-    </DashboardSection>
-
-    <DashboardSection id="transactions" title="Transactions">
-      <DataTable
-        caption="Transaction history with calculated reward points"
-        columns={TRANSACTION_COLUMNS}
-        rows={transactionRows}
-        emptyLabel="No transactions."
-      />
-    </DashboardSection>
+        <DashboardSection id="transactions" title="Transactions">
+          <DataTable
+            caption="Transaction history with calculated reward points"
+            columns={TRANSACTION_COLUMNS}
+            rows={transactionRows}
+            emptyLabel="No transactions."
+          />
+        </DashboardSection>
+      </>
+    )}
   </div>
 );
 
@@ -155,18 +148,6 @@ RewardsDashboardView.propTypes = {
 export const RewardsDashboard = () => {
   const { transactions, monthlyRewards, totals, loading, error, retryable, retry } =
     useRewardsData();
-
-  const monthlyRows = useMemo(
-    () => withMonthlyRowKeys(monthlyRewards),
-    [monthlyRewards],
-  );
-
-  const totalRows = useMemo(() => withTotalRowKeys(totals), [totals]);
-
-  const transactionRows = useMemo(
-    () => withTransactionRowKeys(transactions),
-    [transactions],
-  );
 
   if (loading) {
     return <LoadingDashboard />;
@@ -183,9 +164,9 @@ export const RewardsDashboard = () => {
   return (
     <RewardsDashboardView
       isEmpty={transactions.length === 0}
-      monthlyRows={monthlyRows}
-      totalRows={totalRows}
-      transactionRows={transactionRows}
+      monthlyRows={monthlyRewards}
+      totalRows={totals}
+      transactionRows={transactions}
     />
   );
 };

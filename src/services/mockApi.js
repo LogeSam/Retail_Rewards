@@ -4,6 +4,7 @@ import {
   ServerError,
   TimeoutError,
 } from "./apiErrors.js";
+import { logger } from "../utils/logger.js";
 
 export const DEFAULT_TRANSACTIONS_URL = "/mock/transactions.json";
 export const EMPTY_TRANSACTIONS_URL = "/mock/transactions-empty.json";
@@ -13,12 +14,28 @@ const delay = (ms) =>
     setTimeout(resolve, ms);
   });
 
+const getErrorName = (error) =>
+  error && typeof error === "object" && "name" in error ? error.name : "";
+
 const fetchWithTimeout = async (url, timeoutMs) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     return await fetch(url, { signal: controller.signal });
+  } catch (error) {
+    if (getErrorName(error) === "AbortError") {
+      logger.warn("Transaction fetch timed out.", { timeoutMs, url });
+      throw new TimeoutError();
+    }
+
+    if (error instanceof TypeError) {
+      logger.warn("Transaction fetch failed with a network error.", { url });
+      throw new NetworkError();
+    }
+
+    logger.error("Unexpected error while fetching transactions.", error);
+    throw error;
   } finally {
     clearTimeout(timeoutId);
   }
@@ -65,13 +82,16 @@ export const fetchTransactions = async (options = {}) => {
 
     response = await fetchWithTimeout(url, timeoutMs);
   } catch (error) {
-    if (failMode === "network" || error.name === "TypeError") {
-      throw new NetworkError();
-    }
-    if (error.name === "AbortError") {
-      throw new TimeoutError();
+    if (error instanceof NetworkError || error instanceof TimeoutError) {
+      throw error;
     }
 
+    if (error instanceof TypeError) {
+      logger.warn("Transaction fetch failed with a network error.", { url });
+      throw new NetworkError();
+    }
+
+    logger.error("Unexpected transaction fetch failure.", error);
     throw error;
   }
 

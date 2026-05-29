@@ -75,7 +75,7 @@ production app.
 - Mock data includes multiple customers, decimal purchase amounts, and a consecutive three-month transaction history.
 - Monthly aggregation is keyed by customer, month, and year so the same
   month across different years remains separate.
-- Invalid transaction dates are ignored in monthly aggregation.
+- Invalid transaction dates are logged and skipped in monthly aggregation.
 - Date display uses `Intl.DateTimeFormat` and defaults to the browser
   locale when no locale is supplied.
 - Currency display uses `Intl.NumberFormat` with USD.

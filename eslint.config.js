@@ -2,12 +2,11 @@ import js from '@eslint/js'
 import globals from 'globals'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import jsxA11y from 'eslint-plugin-jsx-a11y'
+import a11y from 'eslint-plugin-jsx-a11y'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'coverage']),
+  globalIgnores(['build', 'coverage']),
   js.configs.recommended,
   {
     files: ['**/*.cjs'],
@@ -16,7 +15,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['**/*.js'],
     ...react.configs.flat['jsx-runtime'],
     settings: {
       react: { version: 'detect' },
@@ -27,14 +26,13 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.{js,jsx}'],
-    ...jsxA11y.flatConfigs.recommended,
+    files: ['**/*.js'],
+    ...a11y.flatConfigs.recommended,
   },
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['**/*.js'],
     plugins: {
       'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
     },
     languageOptions: {
       globals: globals.browser,
@@ -42,10 +40,6 @@ export default defineConfig([
     },
     rules: {
       ...reactHooks.configs.flat.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
     },
   },
   {
@@ -61,9 +55,9 @@ export default defineConfig([
     },
   },
   {
-    files: ['src/**/*.{js,jsx}'],
+    files: ['src/**/*.js'],
     rules: {
-      'no-console': ['error', { allow: ['warn', 'error'] }],
+      'no-console': ['error', { allow: ['debug', 'info', 'warn', 'error'] }],
     },
   },
 ])
