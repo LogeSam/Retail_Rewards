@@ -32,7 +32,7 @@ const handleReset = () => {
   logger.info("React error boundary reset.");
 };
 
-export const ErrorBoundary = ({ children, resetKeys }) => (
+export const ErrorBoundary = ({ children = null, resetKeys = [] }) => (
   <ReactErrorBoundary
     FallbackComponent={ErrorFallback}
     onError={handleError}
@@ -46,9 +46,4 @@ export const ErrorBoundary = ({ children, resetKeys }) => (
 ErrorBoundary.propTypes = {
   children: childrenPropType,
   resetKeys: PropTypes.arrayOf(PropTypes.any),
-};
-
-ErrorBoundary.defaultProps = {
-  children: null,
-  resetKeys: [],
 };

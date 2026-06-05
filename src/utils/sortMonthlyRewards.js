@@ -1,25 +1,9 @@
-const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-export const getMonthIndexByName = (monthName) =>
-  MONTH_NAMES.indexOf(monthName);
+import { getMonthIndexByName } from "./monthNames.js";
 
 export const extractIdNumber = (id) => {
   const s = String(id);
   const m = s.match(/(\d+)$/);
-  return m ? Number(m[1]) : NaN;
+  return m ? Number(m[1]) : null;
 };
 
 const compareMonthlyRewards = (a, b) => {

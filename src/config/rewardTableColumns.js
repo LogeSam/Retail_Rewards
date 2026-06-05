@@ -1,6 +1,9 @@
 import { formatCurrency } from '../utils/formatCurrency.js'
 import { formatPurchaseDate } from '../utils/formatDate.js'
 
+const renderPurchaseDate = (row) => formatPurchaseDate(row.purchaseDate)
+const renderPurchaseAmount = (row) => formatCurrency(row.purchaseAmount)
+
 export const MONTHLY_COLUMNS = [
   {
     key: 'customerId',
@@ -71,7 +74,7 @@ export const TRANSACTION_COLUMNS = [
     width: '17%',
     sortable: true,
     sortType: 'date',
-    render: (row) => formatPurchaseDate(row.purchaseDate),
+    render: renderPurchaseDate,
   },
   {
     key: 'productPurchased',
@@ -87,7 +90,7 @@ export const TRANSACTION_COLUMNS = [
     width: '12%',
     sortable: true,
     sortType: 'number',
-    render: (row) => formatCurrency(row.purchaseAmount),
+    render: renderPurchaseAmount,
   },
   {
     key: 'rewardPoints',

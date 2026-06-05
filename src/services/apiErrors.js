@@ -30,6 +30,16 @@ export class TimeoutError extends ApiError {
   }
 }
 
+const clientMessageForStatus = (status) => {
+  if (status === 404) {
+    return "The requested resource was not found.";
+  }
+  if (status === 400) {
+    return "The request was invalid.";
+  }
+  return "The request could not be completed.";
+};
+
 export class ClientError extends ApiError {
   constructor(status, message) {
     super(message ?? clientMessageForStatus(status), {
@@ -51,16 +61,6 @@ export class ServerError extends ApiError {
     this.name = "ServerError";
   }
 }
-
-const clientMessageForStatus = (status) => {
-  if (status === 404) {
-    return "The requested resource was not found.";
-  }
-  if (status === 400) {
-    return "The request was invalid.";
-  }
-  return "The request could not be completed.";
-};
 
 export const getUserMessage = (error) => {
   if (error instanceof NetworkError) {
@@ -88,5 +88,5 @@ export const isRetryableError = (error) => {
   if (error instanceof ApiError) {
     return error.retryable;
   }
-  return false;
+  return error && typeof error === "object" && error.retryable === true;
 };

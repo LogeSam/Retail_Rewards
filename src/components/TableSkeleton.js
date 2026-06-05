@@ -33,7 +33,10 @@ export const TableSkeleton = ({
       ? 'data-table data-table--fixed data-table--skeleton'
       : 'data-table data-table--skeleton'
 
-  const rows = Array.from({ length: rowCount }, (_, i) => i)
+  const rows = useMemo(
+    () => Array.from({ length: rowCount }, (_, i) => i),
+    [rowCount],
+  )
 
   return (
     <div className="data-table-wrap">

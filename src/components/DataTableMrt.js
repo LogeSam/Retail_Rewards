@@ -99,7 +99,6 @@ export const DataTableMrt = ({
 
   const [paginationState, setPaginationState] = useState({
     pageIndex: 0,
-    rows,
     pageSize: resolvedPageSize,
     showPagination,
   })
@@ -110,7 +109,6 @@ export const DataTableMrt = ({
     ? Math.max(1, Math.ceil(total / resolvedPageSize))
     : 1
   const isPaginationCurrent =
-    paginationState.rows === rows &&
     paginationState.pageSize === resolvedPageSize &&
     paginationState.showPagination === showPagination
   const pagination = useMemo(
@@ -155,7 +153,6 @@ export const DataTableMrt = ({
 
       setPaginationState({
         pageIndex: next.pageIndex ?? 0,
-        rows,
         pageSize: resolvedPageSize,
         showPagination,
       })

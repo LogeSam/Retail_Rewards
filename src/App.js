@@ -3,8 +3,10 @@ import { RewardsDashboard } from "./pages/RewardsDashboard.js";
 import "./styles/global.css";
 
 const App = () => (
-  <ErrorBoundary>
-    <RewardsDashboard />
+  <ErrorBoundary resetKeys={[window.location.pathname]}>
+    <main>
+      <RewardsDashboard />
+    </main>
   </ErrorBoundary>
 );
 

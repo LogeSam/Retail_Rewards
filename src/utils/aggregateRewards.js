@@ -1,21 +1,7 @@
 import { calculateRewardPoints } from "./rewardPoints.js";
 import { logger } from "./logger.js";
 import { sortMonthlyRewards } from "./sortMonthlyRewards.js";
-
-const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+import { MONTH_NAMES } from "./monthNames.js";
 
 const sanitizeKeyPart = (value) => {
   const key = String(value ?? "missing").trim();
@@ -81,8 +67,9 @@ const requireRewardPoints = (tx, context) => {
       customerId: tx.customerId,
       transactionId: tx.transactionId,
     });
-
-    throw new Error("Cannot aggregate rewards before transactions are enriched.");
+    throw new Error(
+      `Transactions must be enriched before transactions are aggregated; before transactions are enriched for ${context}.`,
+    );
   }
 
   return tx.rewardPoints;
@@ -116,6 +103,9 @@ const monthlyKey = (customerId, year, monthIndex) =>
 export const aggregateMonthlyRewards = (transactions) => {
   const byKey = transactions.reduce((acc, tx) => {
     const add = requireRewardPoints(tx, "monthly rewards");
+    if (add === null) {
+      return acc;
+    }
     const dateParts = getPurchaseDateParts(tx.purchaseDate);
     if (!dateParts) {
       logger.warn("Skipping transaction with invalid purchaseDate.", {
@@ -154,6 +144,9 @@ export const aggregateTotalRewardsByCustomer = (transactions) => {
     const id = tx.customerId;
     const prev = acc[id];
     const add = requireRewardPoints(tx, "total rewards");
+    if (add === null) {
+      return acc;
+    }
     if (!prev) {
       acc[id] = {
         customerId: id,

@@ -64,10 +64,6 @@ DashboardSection.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-DashboardSection.defaultProps = {
-  children: null,
-};
-
 const LoadingDashboard = () => (
   <div className="dashboard" aria-busy="true">
     <p className="visually-hidden" role="status">

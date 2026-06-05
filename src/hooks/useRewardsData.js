@@ -97,23 +97,35 @@ export const useRewardsData = (fetchOptions) => {
     };
   }, [executeLoad]);
 
-  const transactions = useMemo(
-    () => enrichTransactionsWithRewards(state.rawTransactions),
-    [state.rawTransactions],
-  );
+  const transactions = useMemo(() => {
+    try {
+      return enrichTransactionsWithRewards(state.rawTransactions);
+    } catch (error) {
+      logger.error("Unable to enrich transactions.", error);
+      return [];
+    }
+  }, [state.rawTransactions]);
 
-  const monthlyRewards = useMemo(
-    () => aggregateMonthlyRewards(transactions),
-    [transactions],
-  );
+  const monthlyRewards = useMemo(() => {
+    try {
+      return aggregateMonthlyRewards(transactions);
+    } catch (error) {
+      logger.error("Unable to aggregate monthly rewards.", error);
+      return [];
+    }
+  }, [transactions]);
 
-  const totals = useMemo(
-    () => aggregateTotalRewardsByCustomer(transactions),
-    [transactions],
-  );
+  const totals = useMemo(() => {
+    try {
+      return aggregateTotalRewardsByCustomer(transactions);
+    } catch (error) {
+      logger.error("Unable to aggregate total rewards.", error);
+      return [];
+    }
+  }, [transactions]);
 
   const retry = useCallback(() => {
-    void load({ shouldFail: false });
+    void load();
   }, [load]);
 
   return {

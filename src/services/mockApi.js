@@ -14,6 +14,11 @@ const delay = (ms) =>
     setTimeout(resolve, ms);
   });
 
+const cloneTransactionRow = (row) =>
+  typeof structuredClone === "function"
+    ? structuredClone(row)
+    : JSON.parse(JSON.stringify(row));
+
 const getErrorName = (error) =>
   error && typeof error === "object" && "name" in error ? error.name : "";
 
@@ -103,11 +108,17 @@ export const fetchTransactions = async (options = {}) => {
     throw new ClientError(status);
   }
 
-  const data = await response.json();
+  let data;
+  try {
+    data = await response.json();
+  } catch (error) {
+    logger.error("Unable to parse transactions JSON response.", error);
+    throw new Error("Invalid transactions payload.");
+  }
 
   if (!Array.isArray(data)) {
     throw new Error("Invalid transactions payload.");
   }
 
-  return data.map((row) => ({ ...row }));
+  return data.map(cloneTransactionRow);
 };
